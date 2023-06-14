@@ -1,4 +1,0 @@
-[submodule "lockheed"]
-	path = lockheed
-	url = https://github.com/zeroby0/lockheed.git
-	branch = featonlock

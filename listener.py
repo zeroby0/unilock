@@ -32,19 +32,19 @@ cmd_unlock = [
 class MyRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/unlock':
-            subprocess.run(cmd_unlock, shell=True)
+            subprocess.run(cmd_unlock)
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
             self.wfile.write(b'Unlock command executed')
 
         elif self.path == '/lock':
-            subprocess.run(cmd_lock, shell=True)
+            subprocess.run(cmd_lock)
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
             self.wfile.write(b'Lock command executed')
-            
+
         else:
             self.send_response(404)
             self.send_header('Content-type', 'text/html')

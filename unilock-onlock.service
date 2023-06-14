@@ -5,6 +5,8 @@ Description=Unilock: Lock all systems when this system is locked
 ExecStart=lockheed -l -c 'ssh zeroby0@172.16.137.212 "dbus-send --session --dest=org.gnome.ScreenSaver --type=method_call --print-reply --reply-timeout=20000 /org/gnome/ScreenSaver org.gnome.ScreenSaver.SetActive boolean:true"'
 Restart=on-failure
 RestartSec=3s
+User=zeroby0
+Group=zeroby0
 
 [Install]
 WantedBy=graphical-session.target

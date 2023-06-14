@@ -64,7 +64,7 @@ for interface in interfaces:
 
 if tailscale0_ip:
     # Set the server address and port
-    server_address = (tailscale0_ip, 16384)
+    server_address = (tailscale0_ip, 49050)
 
     # Create the HTTP server with custom request handler
     httpd = socketserver.TCPServer(server_address, MyRequestHandler)

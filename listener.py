@@ -4,7 +4,7 @@ import subprocess
 import netifaces
 
 
-interface = 'eth0'
+interface = 'tailscale0'
 interface_ip = None  # Optional. We'll detect the IP
 
 port = 49050 # default: 49050

@@ -4,6 +4,11 @@ import subprocess
 import netifaces
 
 
+interface = 'eth0'
+interface_ip = None  # Optional. We'll detect the IP
+
+port = 49050 # default: 49050
+
 cmd_lock = [
     'dbus-send',
     '--session',
@@ -52,25 +57,37 @@ class MyRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(b'Invalid path')
 
 
-# Get the IP address associated with the 'tailscale0' interface
-interfaces = netifaces.interfaces()
-tailscale0_ip = None
-for interface in interfaces:
-    if interface == 'tailscale0':
-        addresses = netifaces.ifaddresses(interface).get(netifaces.AF_INET)
-        if addresses:
-            tailscale0_ip = addresses[0]['addr']
-            break
+def get_interface_ip(interface_p):
+    # Get the IP address associated with the interface
 
-if tailscale0_ip:
-    # Set the server address and port
-    server_address = (tailscale0_ip, 49050)
+    interfaces = netifaces.interfaces()
+    interface_ip = None
 
-    # Create the HTTP server with custom request handler
-    httpd = socketserver.TCPServer(server_address, MyRequestHandler)
+    for interface in interfaces:
+        if interface == interface_p:
+            addresses = netifaces.ifaddresses(interface).get(netifaces.AF_INET)
+            if addresses:
+                interface_ip = addresses[0]['addr']
+                break
 
-    # Start the server
-    print('Server listening on {}:{}'.format(*server_address))
+    if interface_ip is None:
+        raise RuntimeError(
+            f"Unable to find the IP address for interface {interface_ip}")
+
+    return interface_ip
+
+
+if interface_ip is None:
+    interface_ip = get_interface_ip(interface)
+
+
+try:
+    httpd = socketserver.TCPServer((interface_ip, port), MyRequestHandler)
+
+    print(f'Server listening on {interface_ip}:{port}')
+
     httpd.serve_forever()
-else:
-    print("Unable to find the IP address for 'tailscale0' interface.")
+
+except KeyboardInterrupt:
+    print('Shutting down')
+    httpd.shutdown()

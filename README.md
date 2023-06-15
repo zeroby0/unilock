@@ -112,3 +112,9 @@ After=graphical.target tailscaled.service
 Wants=gnome-session.target tailscaled.service
 ```
 
+### Thank you
+
+Thank you to [@zerodogg](https://github.com/zerodogg)
+for https://notes.zerodogg.org/GNOME/lock-unlock-cli/
+and to [@gogama](https://github.com/gogama)
+for https://github.com/gogama/lockheed.

@@ -7,7 +7,7 @@ import netifaces
 interface = 'tailscale0'
 interface_ip = None  # Optional. We'll detect the IP
 
-port = 49050 # default: 49050
+port = 49050  # default: 49050
 
 cmd_lock = [
     'dbus-send',

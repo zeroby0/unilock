@@ -1,3 +1,4 @@
+import time
 import asyncio
 import http.client
 
@@ -9,7 +10,11 @@ listeners = [
 ]
 
 
-async def make_get_request(host, path):
+async def make_get_request(host, path, retry_count=5):
+
+    if retry_count == 0:
+        print("EXCEPTION: Number or retries exceeded.")
+        return
 
     # If port is not defined, use
     # default port 49050
@@ -17,7 +22,15 @@ async def make_get_request(host, path):
         host = host + ':49050'
 
     conn = http.client.HTTPConnection(host)
-    conn.request('GET', path)
+
+    try:
+        conn.request('GET', path)
+    except ConnectionError:
+        print("Connection error. Will retry after 100 ms.")
+
+        time.sleep(0.01)
+        return await make_get_request(host, path, retry_count-1)
+    
     response = conn.getresponse()
     content = response.read().decode('utf-8')
     print(content)
